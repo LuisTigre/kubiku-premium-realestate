@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Realtor.com - #1 Real Estate Site</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style data-purpose="custom-fonts">
+    /* Using system fonts to match the clean aesthetic of the screenshot */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+  </style>
+<style data-purpose="hero-styling">
+    .hero-gradient-overlay {
+      background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 50%, rgba(255,255,255,1) 100%);
+    }
+    .search-tab-active {
+      border-bottom: 4px solid white;
+      padding-bottom: 4px;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-900">
+<!-- BEGIN: MainHeader -->
+<header class="w-full bg-white border-b border-gray-200 sticky top-0 z-50">
+<div class="max-w-[1440px] mx-auto px-4 h-16 flex items-center justify-between">
+<!-- Left side: Logo and Main Nav -->
+<div class="flex items-center space-x-6">
+<!-- Logo -->
+<a class="flex-shrink-0" href="#">
+<img alt="realtor.com logo" class="h-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQNWSXTrPJMt5Kml-psK1FlPUBcJ8-FEyy3cejx7dGCA5kdu8Z2b1UuwNbC0e0HbGOObOaProFSIcyRluseQmK6r2BMgPok_gyX-vQP_FeokkkR8QJDGdnh5eQz2NXdrjN9mxmdKzEpdDTzrTXfUcw-Bqk8Fco6yac_HHTogMgPOkWcmV8bXwaep9ErFMt911rbQ38-i0I56DHkO_v53XLXblDhxVzxbfjvBVNuDu3VKVSHDbU7KDKlN2F172HU84xghgqPtFIM5c"/>
+</a>
+<!-- Main Links -->
+<nav class="hidden xl:flex items-center space-x-4 text-sm font-medium text-gray-700">
+<a class="hover:text-red-600" href="#">Buy</a>
+<a class="hover:text-red-600" href="#">Sell</a>
+<a class="hover:text-red-600" href="#">Rent</a>
+<a class="hover:text-red-600" href="#">Mortgage</a>
+<a class="hover:text-red-600" href="#">Find an Agent</a>
+<a class="hover:text-red-600" href="#">My Home</a>
+<a class="hover:text-red-600" href="#">News &amp; Insights</a>
+</nav>
+</div>
+<!-- Right side: Secondary Nav and Auth -->
+<div class="flex items-center space-x-4 text-sm font-medium">
+<a class="hidden md:block text-gray-700 hover:text-red-600" href="#">Manage rentals</a>
+<a class="hidden md:block text-gray-700 hover:text-red-600" href="#">Advertise</a>
+<div class="h-4 w-px bg-gray-300 hidden md:block mx-2"></div>
+<a class="text-gray-700 hover:text-red-600" href="#">Log in</a>
+<a class="bg-zinc-800 text-white px-4 py-2 rounded-full hover:bg-zinc-700 transition-colors" href="#">Sign up</a>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: HeroSection -->
+<section class="relative w-full h-[700px] flex flex-col items-center justify-center overflow-hidden">
+<!-- Hero Background Image -->
+<div class="absolute inset-0 z-0">
+<img alt="Luxury home at dusk" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/ADBb0ui7UKgf_bN4OL5VCyL26g515YijTqN5mZdniDcNeZOPwzwvwtjBAjXszrXTuF2mzPLgWV2s17PuZRXNZbjPO0tCFX9eCQ_wlYfuRy63qvMmZfzmRZooJEVyPTaEsLrgLHICGMl7TTdvLH0_-U7gl6RlJeRA-F6XirClRlqTdhilE6Jj6TjXRq2wn5fdBjmJWwR2L8swjoFEI2XwBy2OmKP8vlm86RL7IACpEDsRz8ndTxxthEA_g2rVVaE8-KlP-_FaN467ZeZUfw"/>
+<!-- Gradient overlays to ensure text readability -->
+<div class="absolute inset-0 bg-black/20"></div>
+<div class="absolute inset-0 hero-gradient-overlay"></div>
+</div>
+<!-- Hero Content -->
+<div class="relative z-10 w-full max-w-4xl px-4 text-center text-white">
+<h2 class="text-3xl md:text-5xl font-bold mb-12 drop-shadow-lg">REALTOR® agents recommend*</h2>
+<!-- Search Interface Container -->
+<div class="w-full max-w-3xl mx-auto" data-purpose="search-container">
+<!-- Search Tabs -->
+<div class="flex flex-wrap justify-center space-x-6 mb-4 font-semibold text-lg overflow-x-auto pb-2">
+<button class="search-tab-active">Buy</button>
+<button class="hover:text-gray-200">Rent</button>
+<button class="hover:text-gray-200">Sell</button>
+<button class="hover:text-gray-200">Pre-approval</button>
+<button class="hover:text-gray-200">Just sold</button>
+<button class="hover:text-gray-200">Home value</button>
+</div>
+<!-- Search Input Bar -->
+<div class="relative flex items-center bg-white rounded-full p-1 shadow-2xl">
+<input class="w-full pl-6 pr-32 py-4 rounded-full border-none focus:ring-0 text-gray-800 text-lg" id="search-input" placeholder="Address, School, City, Zip or Neighbor" type="text"/>
+<button class="absolute right-2 top-2 bottom-2 bg-[#d92228] hover:bg-red-700 text-white px-8 rounded-full flex items-center space-x-2 transition-colors">
+<span class="font-bold">Search</span>
+<svg class="h-5 w-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" fill-rule="evenodd"></path>
+</svg>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- END: HeroSection -->
+<!-- BEGIN: BrowseSection -->
+<main class="max-w-[1440px] mx-auto px-6 py-12 -mt-24 relative z-20">
+<h2 class="text-2xl font-bold text-gray-900 mb-8">
+      Browse homes in San Francisco, CA
+    </h2>
+<!-- Cards Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Card: New Listings -->
+<div class="group cursor-pointer rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow relative">
+<img alt="New listings" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeYUtC1TwxOtdqN2jINbriYtU1wh5L-S7TNjOyeOs-bbN0bhogP2JK5uzkXV1A_VQwB0b0N13qQRoN0pUrwC9PJpOn-GQTYLnCjlLAxR0FE-uyqDl5zIX3XK7G40ObLYV6Anh_mZR22TxwgbY-Y0_AZCQb5k_PHB0OG-Nv4RfrfRc5hWs_6-pVDjIEUca3ZhBjr3NFQcw76ggIRmWVJszoPuJlsUUntL063GmrYkeZbjhA_9xOgi5RhUmKxsImg11ByQq0npjvACg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute top-4 left-4 text-white font-bold text-xl drop-shadow-md">New listings</div>
+<div class="absolute top-4 right-4 bg-white/90 text-gray-800 text-xs font-bold px-2 py-1 rounded">379</div>
+</div>
+<!-- Card: Price Reduced -->
+<div class="group cursor-pointer rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow relative">
+<img alt="Price reduced" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXoRkjbvU42qeSK65Ws58-znUDy65FO8s0Ey16m_kEYfhZSq7cCi80BjyXAoq9kDlnE9UnZyy9GJwDlVvvUzmfLgsF5KJV48lL498WbHVW9I3sLZKG4sHtbFGbyJkoAYqvxUWuxPghsxd9y61lEmB5CIcSFXWcE66byvIp2D2n1ftARdZbDuxaL4qs0ysJfMHOp8t1Kmw0BBodax7B4FAp_O86Ka4I7SWKwTY68wSAPSvUm-XM45nsB7q-ZJYYxjJAO-mNG4EXlow"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute top-4 left-4 text-white font-bold text-xl drop-shadow-md">Price reduced</div>
+<div class="absolute top-4 right-4 bg-white/90 text-gray-800 text-xs font-bold px-2 py-1 rounded">133</div>
+</div>
+<!-- Card: Open Houses -->
+<div class="group cursor-pointer rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow relative">
+<img alt="Open houses" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbRX5Hm5nu9chfOqhM9H24f7dSvFtLy9Y64Q0uK9K5lgEuwsX-cd9fHtytUvBwKyLzD48lRL3_byQY7hdwXGQMD7mXNDLKobMw56k9MFLOW6FPZDRAc5AxmUF3ololS3T3fmDsqov-bDOQVOPzxbku-3y_oSgg8rvVBphogAJnGhl02_6qVwTawP3vWPO5xBNur4TClO8uQh5BCO0_8CsBxKu1s8jO72Ge6FBatdRyGyRpIaS7fYnqujESAQ1fzeQLiR28z6A_LWs"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute top-4 left-4 text-white font-bold text-xl drop-shadow-md">Open houses</div>
+<div class="absolute top-4 right-4 bg-white/90 text-gray-800 text-xs font-bold px-2 py-1 rounded">130</div>
+</div>
+<!-- Card: Recently Sold -->
+<div class="group cursor-pointer rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow relative">
+<img alt="Recently sold" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuIW3lxwVNR4EEqb9mLJexzaQxq8nkcFe6EkhrjUru3g-aVD_QRLF3aMSKxwmvdBSTOuiWc9zEEdaz8YHiDMReIYg8vbcPUMVjzCwrc2q2IBJ1BuLn8CIScIJyDx6Fx76b-VPmwP7P5WZOcCnxbe4hNu8hpN-q1s4OfMbhudVmwLPkv1NRW6GD_vlp3wnXIvS9EQgXhk7FDsW2KR_omgXBE83Qhq3gzu44wJQQDcMV5YJJnFS5ZJG4n-3G98CdSM1t-Tt92a2rhMg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute top-4 left-4 text-white font-bold text-xl drop-shadow-md">Recently sold</div>
+<div class="absolute top-4 right-4 bg-white/90 text-gray-800 text-xs font-bold px-2 py-1 rounded">3,215</div>
+</div>
+</div>
+</main>
+<!-- END: BrowseSection -->
+<!-- JavaScript for minor UI interaction -->
+<script data-purpose="tab-switcher">
+    // Simple script to handle active state visual for search tabs
+    const buttons = document.querySelectorAll('[data-purpose="search-container"] button:not(.absolute)');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('search-tab-active'));
+        btn.classList.add('search-tab-active');
+      });
+    });
+  </script>
+</body></html>
