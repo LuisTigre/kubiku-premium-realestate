@@ -23,4 +23,38 @@ services:
         value: "true"
       - key: SPRING_FLYWAY_BASELINE_VERSION
         value: "2"
+      - key: KEYCLOAK_ISSUER_URI
+        value: https://kubiku-auth.onrender.com/realms/kubiku
+      - key: KEYCLOAK_JWK_SET_URI
+        value: https://kubiku-auth.onrender.com/realms/kubiku/protocol/openid-connect/certs
     healthCheckPath: /actuator/health
+
+  - type: web
+    name: kubiku-auth
+    env: docker
+    dockerContext: apps/auth
+    dockerfilePath: apps/auth/Dockerfile
+    plan: free
+    region: frankfurt
+    envVars:
+      - key: KC_DB
+        value: postgres
+      - key: KC_DB_URL
+        value: jdbc:postgresql://aws-0-eu-west-1.pooler.supabase.com:5432/postgres?sslmode=require
+      - key: KC_DB_USERNAME
+        value: postgres.mddkcrjafjkhxwscbogj
+      - key: KC_DB_PASSWORD
+        sync: false
+      - key: KC_DB_SCHEMA
+        value: keycloak
+      - key: KC_HOSTNAME
+        value: kubiku-auth.onrender.com
+      - key: KEYCLOAK_ADMIN
+        value: admin
+      - key: KEYCLOAK_ADMIN_PASSWORD
+        sync: false
+      - key: KC_PROXY
+        value: edge
+      - key: KC_HTTP_RELATIVE_PATH
+        value: /
+    healthCheckPath: /health/live
