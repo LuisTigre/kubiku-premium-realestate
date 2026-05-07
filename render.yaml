@@ -19,6 +19,8 @@ services:
         value: "true"
       - key: SPRING_FLYWAY_BASELINE_VERSION
         value: "2"
+      - key: ALLOWED_ORIGINS
+        value: "http://localhost:3000"
       - key: KEYCLOAK_ISSUER_URI
         value: https://kubiku-auth.onrender.com/realms/kubiku
       - key: KEYCLOAK_JWK_SET_URI
