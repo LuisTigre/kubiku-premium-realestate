@@ -44,6 +44,7 @@ public class Listing {
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
+    @Builder.Default
     private Boolean isVerified = false;
 
     @Enumerated(EnumType.STRING)

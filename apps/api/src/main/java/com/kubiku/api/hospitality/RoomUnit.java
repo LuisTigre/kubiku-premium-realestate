@@ -35,6 +35,7 @@ public class RoomUnit {
     @Column(nullable = false)
     private BigDecimal basePrice;
 
+    @Builder.Default
     private Integer totalUnits = 1;
 
     @JdbcTypeCode(SqlTypes.JSON)

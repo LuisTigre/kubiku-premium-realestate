@@ -40,6 +40,7 @@ public class Lead {
     @Column(columnDefinition = "TEXT")
     private String message;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     private LeadStatus status = LeadStatus.NEW;
 

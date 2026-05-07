@@ -38,6 +38,7 @@ public class Booking {
     @Column(nullable = false)
     private LocalDate checkOut;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     private BookingStatus status = BookingStatus.REQUESTED;
 
