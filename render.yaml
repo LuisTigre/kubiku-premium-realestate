@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: kubiku-api
+    env: docker
+    dockerContext: apps/api
+    dockerfilePath: apps/api/Dockerfile
+    plan: free
+    region: frankfurt
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        value: postgres
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: KEYCLOAK_ISSUER_URI
+        sync: false
+      - key: KEYCLOAK_JWK_SET_URI
+        sync: false
+    healthCheckPath: /actuator/health
