@@ -20,7 +20,7 @@ services:
       - key: SPRING_FLYWAY_BASELINE_VERSION
         value: "2"
       - key: ALLOWED_ORIGINS
-        value: "http://localhost:3000"
+        value: "https://kubiku-premium-realestate-web.vercel.app,http://localhost:3000,http://127.0.0.1:3000"
       - key: SUPABASE_URL
         value: https://mddkcrjafjkhxwscbogj.supabase.co
       - key: SUPABASE_JWT_ISSUER
