@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import Logo from '../ui/Logo';
 import { useAuth } from '../../features/auth/AuthContext';
 
 const Header = () => {
   const { lang, setLang, t } = useLanguage();
-  const { authenticated, login, register, logout, profile } = useAuth();
+  const { authenticated, logout, profile, session } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const currentMode = location.pathname.startsWith('/stay') ? 'stay' : 'live';
 
   // Prevent scrolling when mobile menu is open
@@ -100,13 +101,13 @@ const Header = () => {
             {!authenticated ? (
               <>
                 <button
-                  onClick={() => login({ ui_locales: lang })}
+                  onClick={() => navigate('/login')}
                   className="px-5 py-2.5 text-[15px] font-bold text-gray-900 hover:text-brand-cobalt transition-colors whitespace-nowrap"
                 >
                   {t.auth.login}
                 </button>
                 <button
-                  onClick={() => register({ ui_locales: lang })}
+                  onClick={() => navigate('/register')}
                   className="px-5 py-2.5 text-[15px] font-bold text-brand-cobalt border-2 border-brand-cobalt/10 rounded-xl hover:bg-brand-cobalt/5 transition-all whitespace-nowrap"
                 >
                   {t.auth.signup}
@@ -119,9 +120,11 @@ const Header = () => {
                   className="flex items-center space-x-3 px-4 py-2 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all border border-gray-100"
                 >
                   <div className="w-8 h-8 rounded-full bg-brand-cobalt text-white flex items-center justify-center font-bold text-xs">
-                    {profile?.firstName?.charAt(0) || 'U'}
+                    {(profile?.fullName || session?.user?.user_metadata?.full_name || 'U').charAt(0)}
                   </div>
-                  <span className="text-[14px] font-bold text-gray-800">{profile?.firstName || 'User'}</span>
+                  <span className="text-[14px] font-bold text-gray-800">
+                    {(profile?.fullName || session?.user?.user_metadata?.full_name || 'User').split(' ')[0]}
+                  </span>
                   <svg className={`w-4 h-4 text-gray-400 transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
                   </svg>
@@ -240,13 +243,13 @@ const Header = () => {
               {!authenticated ? (
                 <>
                   <button
-                    onClick={() => { login({ ui_locales: lang }); setIsMenuOpen(false); }}
+                    onClick={() => { navigate('/login'); setIsMenuOpen(false); }}
                     className="w-full py-4 text-center text-[18px] font-bold text-gray-900 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-all"
                   >
                     {t.auth.login}
                   </button>
                   <button
-                    onClick={() => { register({ ui_locales: lang }); setIsMenuOpen(false); }}
+                    onClick={() => { navigate('/register'); setIsMenuOpen(false); }}
                     className="w-full py-4 text-center text-[18px] font-bold text-white bg-brand-cobalt rounded-2xl hover:bg-brand-navy shadow-lg shadow-brand-cobalt/20 transition-all"
                   >
                     {t.auth.signup}
@@ -256,11 +259,13 @@ const Header = () => {
                 <div className="space-y-3">
                   <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-2xl border border-gray-100">
                     <div className="w-12 h-12 rounded-full bg-brand-cobalt text-white flex items-center justify-center font-bold text-xl">
-                      {profile?.firstName?.charAt(0) || 'U'}
+                      {(profile?.fullName || session?.user?.user_metadata?.full_name || 'U').charAt(0)}
                     </div>
                     <div>
-                      <p className="text-[16px] font-bold text-gray-900">{profile?.firstName || 'User'}</p>
-                      <p className="text-[13px] font-medium text-gray-500">{profile?.email}</p>
+                      <p className="text-[16px] font-bold text-gray-900">
+                        {profile?.fullName || session?.user?.user_metadata?.full_name || 'User'}
+                      </p>
+                      <p className="text-[13px] font-medium text-gray-500">{profile?.email || session?.user?.email}</p>
                     </div>
                   </div>
                   <button

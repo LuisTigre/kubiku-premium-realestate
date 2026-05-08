@@ -18,7 +18,7 @@ public class UserController {
 
     @GetMapping("/me")
     public User getCurrentUser() {
-        return userService.syncUserWithKeycloak();
+        return userService.syncUserWithAuth();
     }
 
     @GetMapping

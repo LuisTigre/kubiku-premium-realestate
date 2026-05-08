@@ -22,7 +22,7 @@ public class User {
     private UUID id;
 
     @Column(unique = true, nullable = false)
-    private String keycloakId;
+    private String authId;
 
     @Column(unique = true, nullable = false)
     private String email;

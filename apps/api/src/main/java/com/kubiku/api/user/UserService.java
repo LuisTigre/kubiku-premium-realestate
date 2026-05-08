@@ -1,6 +1,7 @@
 package com.kubiku.api.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -15,55 +16,104 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public User syncUserWithKeycloak() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        
-        if (!(principal instanceof Jwt)) {
-            throw new RuntimeException("User is not authenticated with JWT");
-        }
-
-        Jwt jwt = (Jwt) principal;
-        String keycloakId = jwt.getSubject();
-        String email = jwt.getClaimAsString("email");
-        String name = jwt.getClaimAsString("name");
-        
-        // Extract roles from realm_access
-        String role = "USER";
-        java.util.Map<String, Object> realmAccess = jwt.getClaim("realm_access");
-        if (realmAccess != null && realmAccess.containsKey("roles")) {
-            java.util.Collection<String> roles = (java.util.Collection<String>) realmAccess.get("roles");
-            if (roles.contains("ADMIN")) {
-                role = "ADMIN";
-            } else if (roles.contains("PARTNER")) {
-                role = "PARTNER";
+    public User syncUserWithAuth() {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            
+            if (auth == null || !auth.isAuthenticated() || auth instanceof org.springframework.security.authentication.AnonymousAuthenticationToken) {
+                throw new RuntimeException("User is not authenticated");
             }
-        }
-
-        Optional<User> existingUser = userRepository.findByKeycloakId(keycloakId);
-        
-        if (existingUser.isPresent()) {
-            User user = existingUser.get();
-            // Optional: Update name/email if they changed in Keycloak
-            if (!user.getEmail().equals(email) || !user.getFullName().equals(name)) {
-                user.setEmail(email);
-                user.setFullName(name);
-                return userRepository.save(user);
+            
+            Object principal = auth.getPrincipal();
+            if (!(principal instanceof Jwt)) {
+                throw new RuntimeException("Authentication principal is not a JWT");
             }
-            return user;
+
+            Jwt jwt = (Jwt) principal;
+            String authId = jwt.getSubject();
+            String email = jwt.getClaimAsString("email");
+            
+            // Extract name from user_metadata or fallback
+            String name = null;
+            java.util.Map<String, Object> userMetadata = jwt.getClaim("user_metadata");
+            if (userMetadata != null) {
+                name = (String) userMetadata.get("full_name");
+                if (name == null) {
+                    name = (String) userMetadata.get("name");
+                }
+            }
+            
+            // Determine role from app_metadata or default to USER
+            String role = "USER";
+            java.util.Map<String, Object> appMetadata = jwt.getClaim("app_metadata");
+            if (appMetadata != null && appMetadata.containsKey("roles")) {
+                Object rolesObj = appMetadata.get("roles");
+                if (rolesObj instanceof java.util.Collection) {
+                    java.util.Collection<?> roles = (java.util.Collection<?>) rolesObj;
+                    if (roles.contains("ADMIN")) {
+                        role = "ADMIN";
+                    } else if (roles.contains("PARTNER")) {
+                        role = "PARTNER";
+                    }
+                }
+            }
+
+            // 1. Try to find by authId (Supabase UUID)
+            Optional<User> userByAuthId = userRepository.findByAuthId(authId);
+            if (userByAuthId.isPresent()) {
+                User user = userByAuthId.get();
+                return updateIfNeeded(user, email, name, role);
+            }
+
+            // 2. If not found, try to find by email (for account linking)
+            if (email != null) {
+                Optional<User> userByEmail = userRepository.findByEmail(email);
+                if (userByEmail.isPresent()) {
+                    User user = userByEmail.get();
+                    user.setAuthId(authId); // Link the Supabase ID
+                    return updateIfNeeded(user, email, name, role);
+                }
+            }
+
+            // 3. Not found by either, create new user
+            User newUser = User.builder()
+                    .authId(authId)
+                    .email(email)
+                    .fullName(name != null ? name : (email != null ? email : "User " + authId.substring(0, 8)))
+                    .role(role)
+                    .build();
+
+            return userRepository.save(newUser);
+            
+        } catch (Exception e) {
+            System.err.println("CRITICAL SYNC ERROR: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
         }
-
-        // Create new user
-        User newUser = User.builder()
-                .keycloakId(keycloakId)
-                .email(email)
-                .fullName(name != null ? name : email)
-                .role(role)
-                .build();
-
-        return userRepository.save(newUser);
     }
 
-    public Optional<User> findByKeycloakId(String keycloakId) {
-        return userRepository.findByKeycloakId(keycloakId);
+    private User updateIfNeeded(User user, String email, String name, String role) {
+        boolean updated = false;
+        if (email != null && !email.equals(user.getEmail())) {
+            user.setEmail(email);
+            updated = true;
+        }
+        if (name != null && !name.equals(user.getFullName())) {
+            user.setFullName(name);
+            updated = true;
+        }
+        if (role != null && !role.equals(user.getRole())) {
+            user.setRole(role);
+            updated = true;
+        }
+        
+        if (updated) {
+            return userRepository.save(user);
+        }
+        return user;
+    }
+
+    public Optional<User> findByAuthId(String authId) {
+        return userRepository.findByAuthId(authId);
     }
 }

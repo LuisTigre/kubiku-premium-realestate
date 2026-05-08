@@ -6,6 +6,7 @@ import LiveBrowseGrid from './features/realestate/components/LiveBrowseGrid';
 import StayHero from './features/hospitality/components/StayHero';
 import StayBrowseGrid from './features/hospitality/components/StayBrowseGrid';
 import LandingPage from './pages/LandingPage';
+import AuthPage from './pages/AuthPage';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { AuthProvider } from './features/auth/AuthContext';
 import Logo from './components/ui/Logo';
@@ -13,17 +14,18 @@ import Logo from './components/ui/Logo';
 // Wrapper to handle layout visibility based on route
 const AppLayout = ({ children }) => {
   const location = useLocation();
+  const isAuth = location.pathname.startsWith('/login') || location.pathname.startsWith('/register');
   const isLanding = location.pathname === '/';
 
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans selection:bg-brand-cobalt/10 selection:text-brand-cobalt">
-      {!isLanding && <Header />}
+      {!isLanding && !isAuth && <Header />}
       
       <main className="flex-grow">
         {children}
       </main>
 
-      {!isLanding && <Footer />}
+      {!isLanding && !isAuth && <Footer />}
     </div>
   );
 };
@@ -36,6 +38,8 @@ function App() {
           <AppLayout>
             <Routes>
               <Route path="/" element={<LandingPage />} />
+              <Route path="/login" element={<AuthPage />} />
+              <Route path="/register" element={<AuthPage />} />
               <Route path="/live" element={
                 <>
                   <LiveHero />
