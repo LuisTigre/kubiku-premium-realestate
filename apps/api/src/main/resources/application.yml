@@ -1,6 +1,8 @@
 spring:
   application:
     name: kubiku-api
+  main:
+    lazy-initialization: true
   
   security:
     oauth2:

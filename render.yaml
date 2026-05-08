@@ -25,4 +25,6 @@ services:
         value: https://mddkcrjafjkhxwscbogj.supabase.co
       - key: SUPABASE_JWT_ISSUER
         value: https://mddkcrjafjkhxwscbogj.supabase.co/auth/v1
+      - key: JAVA_TOOL_OPTIONS
+        value: "-XX:+UseContainerSupport -Xms128m -Xmx384m -XX:+UseSerialGC"
     healthCheckPath: /actuator/health
