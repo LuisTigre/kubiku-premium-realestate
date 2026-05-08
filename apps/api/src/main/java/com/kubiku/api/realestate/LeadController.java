@@ -13,22 +13,25 @@ import java.util.UUID;
 @Tag(name = "Real Estate Leads", description = "Inquiry and contact management")
 public class LeadController {
 
-    private final LeadRepository leadRepository;
+    private final LeadService leadService;
 
     @GetMapping
     public List<Lead> getAllLeads() {
-        return leadRepository.findAll();
+        return leadService.getAllLeads();
+    }
+
+    @GetMapping("/agent")
+    public List<Lead> getAgentLeads() {
+        return leadService.getAgentLeads();
     }
 
     @PostMapping
-    public Lead createLead(@RequestBody Lead lead) {
-        return leadRepository.save(lead);
+    public Lead createLead(@RequestBody LeadRequestDTO request) {
+        return leadService.createLead(request);
     }
 
     @PatchMapping("/{id}/status")
     public Lead updateStatus(@PathVariable UUID id, @RequestParam Lead.LeadStatus status) {
-        Lead lead = leadRepository.findById(id).orElseThrow();
-        lead.setStatus(status);
-        return leadRepository.save(lead);
+        return leadService.updateLeadStatus(id, status);
     }
 }

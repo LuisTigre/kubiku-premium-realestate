@@ -9,4 +9,5 @@ import java.util.UUID;
 @Repository
 public interface LeadRepository extends JpaRepository<Lead, UUID> {
     List<Lead> findByPropertyId(UUID propertyId);
+    List<Lead> findByPropertyAgentIdOrderByCreatedAtDesc(UUID agentId);
 }

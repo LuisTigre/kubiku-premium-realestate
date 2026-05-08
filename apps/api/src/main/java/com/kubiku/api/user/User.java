@@ -33,7 +33,8 @@ public class User {
     @Column(nullable = false)
     private String role; // USER, PARTNER, ADMIN
 
-    private String phone;
+    @Column(name = "phone")
+    private String phoneNumber;
 
     @CreationTimestamp
     private ZonedDateTime createdAt;

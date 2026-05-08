@@ -14,10 +14,17 @@ import java.util.UUID;
 public class PropertyController {
 
     private final PropertyRepository propertyRepository;
+    private final com.kubiku.api.user.UserService userService;
 
     @GetMapping
     public List<Property> getAllProperties() {
         return propertyRepository.findAll();
+    }
+
+    @GetMapping("/agent")
+    public List<Property> getAgentProperties() {
+        com.kubiku.api.user.User currentUser = userService.syncUserWithAuth();
+        return propertyRepository.findByAgentId(currentUser.getId());
     }
 
     @PostMapping

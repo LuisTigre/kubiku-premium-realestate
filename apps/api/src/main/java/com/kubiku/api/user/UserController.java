@@ -21,6 +21,11 @@ public class UserController {
         return userService.syncUserWithAuth();
     }
 
+    @PutMapping("/me")
+    public User updateProfile(@RequestBody UserUpdateDTO data) {
+        return userService.updateProfile(data);
+    }
+
     @GetMapping
     public List<User> getAllUsers() {
         return userRepository.findAll();

@@ -9,4 +9,5 @@ import java.util.UUID;
 @Repository
 public interface PropertyRepository extends JpaRepository<Property, UUID> {
     Optional<Property> findByListingId(UUID listingId);
+    java.util.List<Property> findByAgentId(UUID agentId);
 }

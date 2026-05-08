@@ -95,6 +95,21 @@ export const LanguageProvider = ({ children }) => {
           { title: 'Platform', links: ['How it works', 'Pricing'] },
           { title: 'Support', links: ['Help Center', 'Contact'] }
         ]
+      },
+      booking: {
+        checkIn: 'Check-In',
+        checkOut: 'Check-Out',
+        guests: 'Guests',
+        requestToBook: 'Request to Book',
+        notAvailable: 'Not Available',
+        fullyBooked: 'Fully booked for these dates',
+        requestSent: 'Request Sent!',
+        requestSentDesc: 'The owner will review your request and get back to you shortly.',
+        from: 'From',
+        perNight: '/night',
+        total: 'Total',
+        serviceFee: 'Service fee',
+        wontBeCharged: "You won't be charged yet"
       }
     },
     pt: {
@@ -170,6 +185,21 @@ export const LanguageProvider = ({ children }) => {
           { title: 'Plataforma', links: ['Como funciona', 'Preços'] },
           { title: 'Suporte', links: ['Centro de Ajuda', 'Contacto'] }
         ]
+      },
+      booking: {
+        checkIn: 'Check-In',
+        checkOut: 'Check-Out',
+        guests: 'Hóspedes',
+        requestToBook: 'Solicitar Reserva',
+        notAvailable: 'Indisponível',
+        fullyBooked: 'Esgotado para estas datas',
+        requestSent: 'Solicitação Enviada!',
+        requestSentDesc: 'O proprietário irá analisar o seu pedido e entrará em contacto em breve.',
+        from: 'Desde',
+        perNight: '/noite',
+        total: 'Total',
+        serviceFee: 'Taxa de serviço',
+        wontBeCharged: 'Não será cobrado nada agora'
       }
     }
   };

@@ -14,21 +14,30 @@ import java.util.UUID;
 public class BookingController {
 
     private final BookingRepository bookingRepository;
+    private final BookingService bookingService;
 
     @GetMapping
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
 
-    @PostMapping
-    public Booking createBooking(@RequestBody Booking booking) {
-        return bookingRepository.save(booking);
+    @PostMapping("/request")
+    public Booking createBookingRequest(@RequestBody BookingRequestDTO request) {
+        return bookingService.createBookingRequest(request);
+    }
+
+    @GetMapping("/partner")
+    public List<Booking> getPartnerBookings() {
+        return bookingService.getPartnerBookings();
+    }
+
+    @GetMapping("/my")
+    public List<Booking> getMyBookings() {
+        return bookingService.getMyBookings();
     }
 
     @PatchMapping("/{id}/status")
     public Booking updateStatus(@PathVariable UUID id, @RequestParam Booking.BookingStatus status) {
-        Booking booking = bookingRepository.findById(id).orElseThrow();
-        booking.setStatus(status);
-        return bookingRepository.save(booking);
+        return bookingService.updateBookingStatus(id, status);
     }
 }

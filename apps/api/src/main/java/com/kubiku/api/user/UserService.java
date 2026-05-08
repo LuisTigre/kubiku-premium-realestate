@@ -116,4 +116,19 @@ public class UserService {
     public Optional<User> findByAuthId(String authId) {
         return userRepository.findByAuthId(authId);
     }
+
+    @Transactional
+    public User updateProfile(UserUpdateDTO data) {
+        User currentUser = syncUserWithAuth();
+        
+        if (data.getFullName() != null && !data.getFullName().isBlank()) {
+            currentUser.setFullName(data.getFullName());
+        }
+        
+        if (data.getPhoneNumber() != null) {
+            currentUser.setPhoneNumber(data.getPhoneNumber());
+        }
+        
+        return userRepository.save(currentUser);
+    }
 }

@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import Logo from '../ui/Logo';
 import { useAuth } from '../../features/auth/AuthContext';
+import NotificationDropdown from './NotificationDropdown';
 
 const Header = () => {
   const { lang, setLang, t } = useLanguage();
@@ -75,8 +76,8 @@ const Header = () => {
         <div className="flex items-center space-x-4 xl:space-x-6">
           {/* Secondary Nav for XL screens */}
           <div className="hidden xl:flex items-center space-x-6 xl:space-x-8 text-[14px] font-bold text-gray-700 mr-4">
-            <a className="hover:text-brand-cobalt transition-colors whitespace-nowrap" href="#">{t.auth.manage}</a>
-            <a className="hover:text-brand-cobalt transition-colors whitespace-nowrap" href="#">{t.auth.advertise}</a>
+            <button onClick={() => navigate('/dashboard')} className="hover:text-brand-cobalt transition-colors whitespace-nowrap">{t.auth.manage}</button>
+            <button onClick={() => navigate('/agent-dashboard')} className="hover:text-brand-cobalt transition-colors whitespace-nowrap">{t.auth.advertise}</button>
           </div>
 
           <div className="h-6 w-px bg-gray-100 hidden xl:block mr-2"></div>
@@ -97,7 +98,8 @@ const Header = () => {
             </button>
           </div>
 
-          <div className="hidden sm:flex items-center space-x-3 ml-4 flex-shrink-0">
+            <div className="hidden sm:flex items-center space-x-3 ml-4 flex-shrink-0">
+            {authenticated && <NotificationDropdown />}
             {!authenticated ? (
               <>
                 <button
@@ -136,7 +138,28 @@ const Header = () => {
                       <p className="text-[12px] font-bold text-gray-400 uppercase tracking-wider">Account</p>
                       <p className="text-[14px] font-bold text-gray-800 truncate">{profile?.email}</p>
                     </div>
-                    <button className="w-full text-left px-4 py-2.5 text-[14px] font-bold text-gray-700 hover:bg-gray-50 hover:text-brand-cobalt transition-colors">
+                    <button 
+                      onClick={() => { navigate('/dashboard'); setIsUserMenuOpen(false); }}
+                      className="w-full text-left px-4 py-2.5 text-[14px] font-bold text-gray-700 hover:bg-gray-50 hover:text-brand-cobalt transition-colors"
+                    >
+                      Partner Dashboard
+                    </button>
+                    <button 
+                      onClick={() => { navigate('/agent-dashboard'); setIsUserMenuOpen(false); }}
+                      className="w-full text-left px-4 py-2.5 text-[14px] font-bold text-gray-700 hover:bg-gray-50 hover:text-brand-cobalt transition-colors"
+                    >
+                      Agent Dashboard
+                    </button>
+                    <button 
+                      onClick={() => { navigate('/my-bookings'); setIsUserMenuOpen(false); }}
+                      className="w-full text-left px-4 py-2.5 text-[14px] font-bold text-gray-700 hover:bg-gray-50 hover:text-brand-cobalt transition-colors"
+                    >
+                      My Bookings
+                    </button>
+                    <button 
+                      onClick={() => { navigate('/profile'); setIsUserMenuOpen(false); }}
+                      className="w-full text-left px-4 py-2.5 text-[14px] font-bold text-gray-700 hover:bg-gray-50 hover:text-brand-cobalt transition-colors"
+                    >
                       My Profile
                     </button>
                     <button
@@ -268,6 +291,18 @@ const Header = () => {
                       <p className="text-[13px] font-medium text-gray-500">{profile?.email || session?.user?.email}</p>
                     </div>
                   </div>
+                  <button
+                    onClick={() => { navigate('/dashboard'); setIsMenuOpen(false); }}
+                    className="w-full py-4 text-center text-[18px] font-bold text-gray-900 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-all"
+                  >
+                    Partner Dashboard
+                  </button>
+                  <button
+                    onClick={() => { navigate('/my-bookings'); setIsMenuOpen(false); }}
+                    className="w-full py-4 text-center text-[18px] font-bold text-gray-900 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-all"
+                  >
+                    My Bookings
+                  </button>
                   <button
                     onClick={() => { logout(); setIsMenuOpen(false); }}
                     className="w-full py-4 text-center text-[18px] font-bold text-red-500 bg-red-50 rounded-2xl hover:bg-red-100 transition-all"
