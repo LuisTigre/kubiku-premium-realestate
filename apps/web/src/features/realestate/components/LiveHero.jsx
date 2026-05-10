@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../../context/LanguageContext';
 
 const Hero = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(t.hero.tabs[0]);
+
+  const handleSearch = () => {
+    navigate('/browse');
+  };
 
   return (
     <section className="relative w-full h-[58vh] min-h-[500px] flex flex-col items-center justify-center overflow-hidden">
@@ -55,7 +61,10 @@ const Hero = () => {
               placeholder={t.hero.placeholder} 
               type="text" 
             />
-            <button className="absolute right-2 top-2 bottom-2 bg-brand-cobalt hover:bg-brand-navy text-white px-10 rounded-full flex items-center space-x-2 transition-all duration-300 shadow-lg active:scale-95 group">
+            <button 
+              onClick={handleSearch}
+              className="absolute right-2 top-2 bottom-2 bg-brand-cobalt hover:bg-brand-navy text-white px-10 rounded-full flex items-center space-x-2 transition-all duration-300 shadow-lg active:scale-95 group"
+            >
               <span className="font-extrabold text-[17px]">{t.hero.search}</span>
               <svg className="h-6 w-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>

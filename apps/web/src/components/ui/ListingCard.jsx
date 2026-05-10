@@ -1,8 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const ListingCard = ({ title, count, image }) => {
+const ListingCard = ({ title, count, image, to = '/browse' }) => {
+  const navigate = useNavigate();
+  
   return (
-    <div className="group cursor-pointer rounded-xl overflow-hidden shadow-soft hover:shadow-2xl transition-all duration-700 relative aspect-[1.4/1] sm:aspect-[4/3] bg-gray-100">
+    <div 
+      onClick={() => navigate(to)}
+      className="group cursor-pointer rounded-xl overflow-hidden shadow-soft hover:shadow-2xl transition-all duration-700 relative aspect-[1.4/1] sm:aspect-[4/3] bg-gray-100"
+    >
       <img 
         alt={title} 
         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out" 
