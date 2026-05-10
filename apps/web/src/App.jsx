@@ -21,22 +21,25 @@ import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { AuthProvider } from './features/auth/AuthContext';
 import Logo from './components/ui/Logo';
 
+import MobileNav from './components/layout/MobileNav';
+
 // Wrapper to handle layout visibility based on route
 const AppLayout = ({ children }) => {
   const location = useLocation();
   const isAuth = location.pathname.startsWith('/login') || location.pathname.startsWith('/register');
+  const isPropertyDetail = location.pathname.startsWith('/property/');
   const isLanding = location.pathname === '/';
-  const isLive = location.pathname === '/live';
 
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans selection:bg-brand-cobalt/10 selection:text-brand-cobalt">
-      {!isLanding && !isAuth && !isLive && <Header />}
+      {!isLanding && !isAuth && <Header />}
       
-      <main className="flex-grow">
+      <main className={`flex-grow ${!isPropertyDetail ? 'pb-20 md:pb-0' : ''}`}>
         {children}
       </main>
 
-      {!isLanding && !isAuth && !isLive && <Footer />}
+      {!isLanding && !isAuth && <Footer />}
+      {!isAuth && !isPropertyDetail && <MobileNav />}
     </div>
   );
 };

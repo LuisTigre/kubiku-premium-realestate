@@ -2,19 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { PropertyService } from '../services/PropertyService';
 import { useLanguage } from '../../../context/LanguageContext';
+import { 
+  Bed, 
+  Bath, 
+  Maximize2, 
+  MapPin, 
+  Heart, 
+  Sparkles,
+  Camera
+} from 'lucide-react';
 
 const PropertyBrowseGrid = () => {
     const [properties, setProperties] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [favorites, setFavorites] = useState(new Set());
     const { lang } = useLanguage();
 
     const t = {
         promoted: lang === 'en' ? 'Promoted' : 'Promovido',
-        beds: lang === 'en' ? 'Beds' : 'Quartos',
-        baths: lang === 'en' ? 'Baths' : 'Casas de Banho',
-        area: 'm²',
-        viewDetails: lang === 'en' ? 'View Details' : 'Ver Detalhes',
-        contact: lang === 'en' ? 'Contact' : 'Contactar'
+        beds: lang === 'en' ? 'bd' : 'qt',
+        baths: lang === 'en' ? 'ba' : 'wc',
+        viewDetails: lang === 'en' ? 'View' : 'Ver',
     };
 
     useEffect(() => {
@@ -27,7 +35,7 @@ const PropertyBrowseGrid = () => {
                     throw new Error('No properties found');
                 }
             } catch (err) {
-                console.warn('Backend fetch failed or returned empty, using mock data for visual demo:', err);
+                console.warn('Backend fetch failed, using mock data:', err);
                 const mockProperties = [
                     {
                         id: 1,
@@ -36,7 +44,7 @@ const PropertyBrowseGrid = () => {
                         listing: {
                             title: lang === 'en' ? 'Modern Luxury Villa in Talatona' : 'Vivenda de Luxo Moderna em Talatona',
                             locationName: 'Talatona, Luanda',
-                            images: JSON.stringify(['/assets/hero.png'])
+                            images: JSON.stringify(['/assets/hero.png', '/assets/new_listings.png'])
                         },
                         propertyFeatures: JSON.stringify({ beds: 5, baths: 4, sqft: 450, type: lang === 'en' ? 'Villa' : 'Vivenda' })
                     },
@@ -70,6 +78,27 @@ const PropertyBrowseGrid = () => {
                             images: JSON.stringify(['/assets/new_listings.png'])
                         },
                         propertyFeatures: JSON.stringify({ beds: 2, baths: 1, sqft: 90, type: lang === 'en' ? 'Apartment' : 'Apartamento' })
+                    },
+                    {
+                        id: 5,
+                        price: 210000000,
+                        promoted: true,
+                        listing: {
+                            title: lang === 'en' ? 'Waterfront Estate Mussulo' : 'Propriedade à Beira-Mar Mussulo',
+                            locationName: 'Mussulo, Luanda',
+                            images: JSON.stringify(['/assets/hero.png'])
+                        },
+                        propertyFeatures: JSON.stringify({ beds: 6, baths: 5, sqft: 650, type: lang === 'en' ? 'Estate' : 'Propriedade' })
+                    },
+                    {
+                        id: 6,
+                        price: 28000000,
+                        listing: {
+                            title: lang === 'en' ? 'Studio Apartment Maianga' : 'Estúdio no Maianga',
+                            locationName: 'Maianga, Luanda',
+                            images: JSON.stringify(['/assets/open_houses.png'])
+                        },
+                        propertyFeatures: JSON.stringify({ beds: 1, baths: 1, sqft: 45, type: lang === 'en' ? 'Studio' : 'Estúdio' })
                     }
                 ];
                 setProperties(mockProperties);
@@ -80,19 +109,35 @@ const PropertyBrowseGrid = () => {
         fetchProperties();
     }, [lang]);
 
+    const toggleFavorite = (e, id) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setFavorites(prev => {
+            const next = new Set(prev);
+            if (next.has(id)) next.delete(id);
+            else next.add(id);
+            return next;
+        });
+    };
+
+    const formatPrice = (price) => {
+        if (price >= 1000000) {
+            return `Kz ${(price / 1000000).toFixed(1)}M`;
+        }
+        return `Kz ${price?.toLocaleString()}`;
+    };
+
+    // Loading skeleton — mobile-optimized
     if (loading) {
         return (
-            <div className="flex flex-col gap-6 py-12">
-                {[1, 2, 3, 4].map(i => (
-                    <div key={i} className="animate-pulse flex flex-col md:flex-row bg-white rounded-[2rem] h-[250px] overflow-hidden">
-                        <div className="w-full md:w-[350px] bg-gray-200 h-full"></div>
-                        <div className="flex-grow p-8">
-                            <div className="h-8 bg-gray-200 rounded w-3/4 mb-4"></div>
-                            <div className="h-4 bg-gray-200 rounded w-1/4 mb-8"></div>
-                            <div className="flex gap-4">
-                                <div className="h-6 bg-gray-200 rounded w-16"></div>
-                                <div className="h-6 bg-gray-200 rounded w-16"></div>
-                            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 py-6 md:py-10">
+                {[1, 2, 3, 4, 5, 6].map(i => (
+                    <div key={i} className="animate-pulse">
+                        <div className="aspect-[16/10] bg-gray-200 rounded-2xl md:rounded-3xl"></div>
+                        <div className="space-y-2 pt-3 px-1">
+                            <div className="h-4 bg-gray-200 rounded-lg w-3/4"></div>
+                            <div className="h-3 bg-gray-200 rounded-lg w-1/2"></div>
+                            <div className="h-3 bg-gray-200 rounded-lg w-1/3"></div>
                         </div>
                     </div>
                 ))}
@@ -101,7 +146,7 @@ const PropertyBrowseGrid = () => {
     }
 
     return (
-        <div className="flex flex-col gap-6 py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 py-6 md:py-10">
             {properties.map((property) => {
                 if (!property) return null;
 
@@ -114,116 +159,100 @@ const PropertyBrowseGrid = () => {
                     ? (typeof listing.images === 'string' ? JSON.parse(listing.images) : listing.images)
                     : [];
 
+                const isFav = favorites.has(property.id);
+
                 return (
-                    <div 
+                    <Link 
                         key={property.id} 
-                        className={`group bg-white rounded-[2rem] overflow-hidden border transition-all duration-500 flex flex-col md:flex-row hover:shadow-2xl hover:border-brand-cobalt/20 ${property.promoted ? 'border-brand-cobalt/20 bg-brand-cobalt/[0.02]' : 'border-gray-100 shadow-sm'}`}
+                        to={`/property/${property.id}`}
+                        className="group block"
                     >
-                        {/* Image Side */}
-                        <div className="relative w-full md:w-[350px] h-[250px] overflow-hidden">
+                        {/* Image Container — Airbnb-style rounded card */}
+                        <div className="relative aspect-[16/10] rounded-2xl md:rounded-3xl overflow-hidden mb-2.5 md:mb-3">
                             <img 
-                                src={images?.[0] || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=800'} 
-                                alt={listing.title || 'Property'}
-                                onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=800'; }}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                src={images?.[0] || '/assets/hero.png'} 
+                                alt={listing.title}
+                                onError={(e) => { e.target.src = '/assets/hero.png'; }}
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                loading="lazy"
                             />
-                            {property.promoted && (
-                                <div className="absolute top-4 left-4">
-                                    <span className="bg-brand-cobalt text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider shadow-lg">
+                            
+                            {/* Top-left badges */}
+                            <div className="absolute top-2.5 left-2.5 md:top-3 md:left-3 flex items-center gap-1.5">
+                                {property.promoted && (
+                                    <span className="bg-brand-cobalt text-white px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-lg">
+                                        <Sparkles className="w-2.5 h-2.5" />
                                         {t.promoted}
                                     </span>
+                                )}
+                                <span className="bg-white/95 backdrop-blur-sm text-gray-800 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                                    {features.type || 'Property'}
+                                </span>
+                            </div>
+
+                            {/* Favorite button */}
+                            <button 
+                                onClick={(e) => toggleFavorite(e, property.id)}
+                                className={`absolute top-2.5 right-2.5 md:top-3 md:right-3 w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center transition-all shadow-md ${
+                                    isFav 
+                                        ? 'bg-white text-red-500' 
+                                        : 'bg-black/20 backdrop-blur-sm text-white hover:bg-white hover:text-red-500'
+                                }`}
+                            >
+                                <Heart className={`w-4 h-4 ${isFav ? 'fill-current' : ''}`} />
+                            </button>
+
+                            {/* Photo count */}
+                            {images?.length > 1 && (
+                                <div className="absolute bottom-2.5 right-2.5 bg-black/50 backdrop-blur-sm text-white px-2 py-1 rounded-lg text-[10px] font-bold flex items-center gap-1">
+                                    <Camera className="w-3 h-3" />
+                                    {images.length}
                                 </div>
                             )}
-                            <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded-lg text-[10px] font-bold flex items-center gap-1.5">
-                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                {images?.length || 1}
-                            </div>
+
+                            {/* Gradient overlay at bottom for depth */}
+                            <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
                         </div>
 
-                        {/* Content Side */}
-                        <div className="flex-grow p-8 flex flex-col">
-                            <div className="flex justify-between items-start mb-2">
-                                <div>
-                                    <p className="text-brand-cobalt font-black text-xs uppercase tracking-widest mb-1">
-                                        {features?.type || 'Property'}
-                                    </p>
-                                    <Link to={`/property/${property.id}`}>
-                                        <h3 className="text-2xl font-black text-[#1A2B3C] group-hover:text-brand-cobalt transition-colors">
-                                            {listing.title || 'Untitled Property'}
-                                        </h3>
-                                    </Link>
-                                    <p className="text-gray-400 font-bold text-sm flex items-center mt-1">
-                                        <svg className="w-4 h-4 mr-1 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        </svg>
-                                        {listing.locationName || 'Unknown Location'}
-                                    </p>
-                                </div>
-                                <div className="text-right">
-                                    <div className="text-2xl font-black text-[#1A2B3C]">
-                                        Kz {property.price?.toLocaleString() || '0'}
-                                    </div>
-                                    <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">
-                                        {Math.round(property.price / features?.sqft || 0).toLocaleString()} Kz/m²
-                                    </p>
-                                </div>
+                        {/* Content — compact and info-dense for mobile */}
+                        <div className="px-0.5">
+                            {/* Title & Price */}
+                            <div className="flex items-start justify-between gap-2 mb-1">
+                                <h3 className="text-[15px] md:text-base font-bold text-gray-900 leading-snug line-clamp-1 group-hover:text-brand-cobalt transition-colors">
+                                    {listing.title}
+                                </h3>
                             </div>
 
-                            <div className="flex items-center space-x-8 mt-6">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-[#1A2B3C]">
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest leading-tight">{t.beds}</p>
-                                        <p className="text-sm font-black text-[#1A2B3C]">{features?.beds || 0}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-[#1A2B3C]">
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest leading-tight">{t.baths}</p>
-                                        <p className="text-sm font-black text-[#1A2B3C]">{features?.baths || 0}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-[#1A2B3C]">
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest leading-tight">{t.area}</p>
-                                        <p className="text-sm font-black text-[#1A2B3C]">{features?.sqft || 0} m²</p>
-                                    </div>
-                                </div>
+                            {/* Location */}
+                            <p className="text-gray-500 text-[13px] font-medium flex items-center mb-1.5">
+                                <MapPin className="w-3 h-3 mr-1 text-gray-400 flex-shrink-0" />
+                                {listing.locationName}
+                            </p>
+
+                            {/* Features row — compact inline */}
+                            <div className="flex items-center gap-3 text-gray-500 text-[12px] font-medium mb-1.5">
+                                <span className="flex items-center gap-1">
+                                    <Bed className="w-3.5 h-3.5 text-gray-400" />
+                                    {features.beds || 0} {t.beds}
+                                </span>
+                                <span className="text-gray-300">·</span>
+                                <span className="flex items-center gap-1">
+                                    <Bath className="w-3.5 h-3.5 text-gray-400" />
+                                    {features.baths || 0} {t.baths}
+                                </span>
+                                <span className="text-gray-300">·</span>
+                                <span className="flex items-center gap-1">
+                                    <Maximize2 className="w-3.5 h-3.5 text-gray-400" />
+                                    {features.sqft || 0} m²
+                                </span>
                             </div>
 
-                            <div className="mt-auto pt-6 flex items-center justify-between border-t border-gray-50">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-gray-100 overflow-hidden">
-                                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=agent" alt="Agent" className="w-full h-full object-cover" />
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest leading-tight">Private seller</p>
-                                        <p className="text-xs font-black text-[#1A2B3C]">Kubiku Agent</p>
-                                    </div>
-                                </div>
-                                <div className="flex gap-3">
-                                    <button className="px-6 py-2.5 rounded-xl border border-gray-200 text-sm font-black text-[#1A2B3C] hover:bg-gray-50 transition-all">
-                                        {t.contact}
-                                    </button>
-                                    <Link 
-                                        to={`/property/${property.id}`}
-                                        className="px-6 py-2.5 rounded-xl bg-[#1A2B3C] text-white text-sm font-black hover:bg-brand-cobalt transition-all shadow-lg hover:shadow-brand-cobalt/20"
-                                    >
-                                        {t.viewDetails}
-                                    </Link>
-                                </div>
-                            </div>
+                            {/* Price — bold, prominent */}
+                            <p className="text-[15px] md:text-base font-black text-gray-900">
+                                {formatPrice(property.price)}
+                            </p>
                         </div>
-                    </div>
+                    </Link>
                 );
             })}
         </div>

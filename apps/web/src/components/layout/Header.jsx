@@ -98,10 +98,10 @@ const Header = () => {
             </button>
           </div>
 
-            <div className="hidden sm:flex items-center space-x-3 ml-4 flex-shrink-0">
+            <div className="flex items-center space-x-3 sm:ml-4 flex-shrink-0">
             {authenticated && <NotificationDropdown />}
             {!authenticated ? (
-              <>
+              <div className="hidden sm:flex items-center space-x-3">
                 <button
                   onClick={() => navigate('/login')}
                   className="px-5 py-2.5 text-[15px] font-bold text-gray-900 hover:text-brand-cobalt transition-colors whitespace-nowrap"
@@ -114,20 +114,20 @@ const Header = () => {
                 >
                   {t.auth.signup}
                 </button>
-              </>
+              </div>
             ) : (
               <div className="relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center space-x-3 px-4 py-2 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all border border-gray-100"
+                  className="flex items-center space-x-3 px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all border border-gray-100"
                 >
-                  <div className="w-8 h-8 rounded-full bg-brand-cobalt text-white flex items-center justify-center font-bold text-xs">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-brand-cobalt text-white flex items-center justify-center font-bold text-[10px] sm:text-xs">
                     {(profile?.fullName || session?.user?.user_metadata?.full_name || 'U').charAt(0)}
                   </div>
-                  <span className="text-[14px] font-bold text-gray-800">
+                  <span className="hidden sm:block text-[14px] font-bold text-gray-800">
                     {(profile?.fullName || session?.user?.user_metadata?.full_name || 'User').split(' ')[0]}
                   </span>
-                  <svg className={`w-4 h-4 text-gray-400 transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className={`hidden sm:block w-4 h-4 text-gray-400 transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
@@ -173,22 +173,6 @@ const Header = () => {
               </div>
             )}
           </div>
-
-          {/* Hamburger Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors z-50 relative"
-          >
-            {isMenuOpen ? (
-              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6h16M4 12h16m-7 6h7" />
-              </svg>
-            )}
-          </button>
         </div>
       </div>
 

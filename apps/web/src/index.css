@@ -32,10 +32,12 @@ h1, h2, h3, h4 {
   .shadow-bloom {
     box-shadow: 0 20px 40px -10px rgba(217, 34, 40, 0.15);
   }
-  .scrollbar-hide::-webkit-scrollbar {
+  .scrollbar-hide::-webkit-scrollbar,
+  .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-  .scrollbar-hide {
+  .scrollbar-hide,
+  .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }

@@ -3,6 +3,26 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { PropertyService } from '../services/PropertyService';
 import { useLanguage } from '../../../context/LanguageContext';
 import LeadForm from '../components/LeadForm';
+import Container from '../../../components/ui/Container';
+import Button from '../../../components/ui/Button';
+import Section from '../../../components/ui/Section';
+import { 
+  ChevronLeft, 
+  Share2, 
+  Heart, 
+  Bed, 
+  Bath, 
+  Square, 
+  Calendar, 
+  MapPin, 
+  Phone, 
+  Mail, 
+  Calculator,
+  Info,
+  Layers,
+  Sparkles,
+  ExternalLink
+} from 'lucide-react';
 
 const PropertyDetails = () => {
     const { id } = useParams();
@@ -73,7 +93,7 @@ const PropertyDetails = () => {
         <div className="min-h-screen flex items-center justify-center bg-white">
             <div className="flex flex-col items-center gap-4">
                 <div className="w-12 h-12 border-4 border-brand-cobalt border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-gray-400 font-black text-xs uppercase tracking-widest animate-pulse">Loading Premium Property...</p>
+                <p className="text-gray-400 font-black text-[10px] uppercase tracking-widest animate-pulse">Loading Premium Property...</p>
             </div>
         </div>
     );
@@ -81,7 +101,6 @@ const PropertyDetails = () => {
     const images = typeof property.listing.images === 'string' ? JSON.parse(property.listing.images) : property.listing.images || [];
     const features = typeof property.propertyFeatures === 'string' ? JSON.parse(property.propertyFeatures) : property.propertyFeatures || {};
 
-    // Fallback image helper using local asset
     const handleImageError = (e) => {
         e.target.src = '/assets/hero.png';
     };
@@ -91,237 +110,314 @@ const PropertyDetails = () => {
         share: lang === 'en' ? 'Share' : 'Partilhar',
         save: lang === 'en' ? 'Save' : 'Guardar',
         surface: lang === 'en' ? 'Surface' : 'Área Útil',
-        rooms: lang === 'en' ? 'Number of rooms' : 'Número de quartos',
+        rooms: lang === 'en' ? 'Rooms' : 'Quartos',
         floor: lang === 'en' ? 'Floor' : 'Andar',
         condition: lang === 'en' ? 'Condition' : 'Estado',
-        built: lang === 'en' ? 'Year built' : 'Ano de construção',
-        available: lang === 'en' ? 'Available from' : 'Disponível desde',
+        built: lang === 'en' ? 'Built' : 'Construção',
+        available: lang === 'en' ? 'Available' : 'Disponível',
         description: lang === 'en' ? 'Description' : 'Descrição',
         location: lang === 'en' ? 'Location' : 'Localização',
-        agent: lang === 'en' ? 'Property Agent' : 'Agente Imobiliário',
-        calculator: lang === 'en' ? 'Mortgage Calculator' : 'Calculadora de Hipoteca',
-        monthly: lang === 'en' ? 'Monthly Payment' : 'Pagamento Mensal',
-        similar: lang === 'en' ? 'Similar Properties' : 'Imóveis Semelhantes'
+        agent: lang === 'en' ? 'Real Estate Agent' : 'Agente Imobiliário',
+        calculator: lang === 'en' ? 'Mortgage' : 'Hipoteca',
+        monthly: lang === 'en' ? 'Monthly' : 'Mensal',
+        similar: lang === 'en' ? 'Similar Properties' : 'Imóveis Semelhantes',
+        contact: lang === 'en' ? 'Contact Agent' : 'Contactar Agente'
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col font-sans selection:bg-brand-cobalt/10">
-            {/* Header Spacer */}
-            <div className="h-20 bg-white"></div>
-
-            {/* Top Toolbar */}
-            <div className="bg-white border-b border-gray-100">
-                <div className="max-w-[1440px] mx-auto px-6 h-14 flex items-center justify-between">
-                    <button onClick={() => navigate(-1)} className="flex items-center text-sm font-black text-[#1A2B3C] hover:text-brand-cobalt transition-colors group">
-                        <svg className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                        {t.back}
+        <div className="min-h-screen bg-white md:bg-gray-50/50 flex flex-col font-sans">
+            {/* Mobile Header Toolbar */}
+            <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white/80 backdrop-blur-lg border-b border-gray-100 z-50 flex items-center justify-between px-4">
+                <button onClick={() => navigate(-1)} className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 text-[#1A2B3C]">
+                    <ChevronLeft className="w-5 h-5 stroke-[3]" />
+                </button>
+                <div className="flex gap-2">
+                    <button className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 text-[#1A2B3C]">
+                        <Share2 className="w-4 h-4" />
                     </button>
-                    <div className="flex items-center gap-4">
-                        <button className="flex items-center gap-2 text-sm font-black text-[#1A2B3C] hover:bg-gray-50 px-3 py-1.5 rounded-lg transition-all">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
-                            {t.share}
-                        </button>
-                        <button className="flex items-center gap-2 text-sm font-black text-[#1A2B3C] hover:bg-gray-50 px-3 py-1.5 rounded-lg transition-all">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-                            {t.save}
-                        </button>
-                    </div>
+                    <button className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 text-[#1A2B3C]">
+                        <Heart className="w-4 h-4" />
+                    </button>
                 </div>
             </div>
 
-            {/* Main Content */}
-            <main className="max-w-[1440px] mx-auto px-6 py-8 w-full">
-                {/* Premium Gallery Grid */}
-                <div className="grid grid-cols-4 grid-rows-2 gap-2 h-[500px] mb-8 rounded-[2rem] overflow-hidden shadow-2xl">
-                    <div className="col-span-2 row-span-2 relative group cursor-pointer">
-                        <img 
-                            src={images[0] || '/assets/hero.png'} 
-                            onError={handleImageError}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Main" 
-                        />
-                        <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-all"></div>
+            {/* Desktop Header Toolbar */}
+            <div className="hidden md:block bg-white border-b border-gray-100 sticky top-0 z-50 h-20">
+                <Container className="h-full flex items-center justify-between">
+                    <Button variant="ghost" onClick={() => navigate(-1)} icon={ChevronLeft}>
+                        {t.back}
+                    </Button>
+                    <div className="flex items-center gap-4">
+                        <Button variant="outline" icon={Share2}>{t.share}</Button>
+                        <Button variant="outline" icon={Heart}>{t.save}</Button>
                     </div>
-                    <div className="relative group cursor-pointer overflow-hidden">
-                        <img src={images[1] || '/assets/recently_sold.png'} onError={handleImageError} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Room 1" />
-                        <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-all"></div>
-                    </div>
-                    <div className="relative group cursor-pointer overflow-hidden">
-                        <img src={images[2] || '/assets/new_listings.png'} onError={handleImageError} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Room 2" />
-                        <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-all"></div>
-                    </div>
-                    <div className="relative group cursor-pointer overflow-hidden">
-                        <img src={images[3] || '/assets/open_houses.png'} onError={handleImageError} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Room 3" />
-                        <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-all"></div>
-                    </div>
-                    <div className="relative group cursor-pointer overflow-hidden">
-                        <img src={images[4] || '/assets/price_reduced.png'} onError={handleImageError} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Room 4" />
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-white font-black text-lg group-hover:bg-black/60 transition-all">
-                            +{images.length > 5 ? images.length - 5 : 0} photos
-                        </div>
-                    </div>
-                </div>
+                </Container>
+            </div>
 
-                {/* Content Layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                    {/* Left Column (8 units) */}
-                    <div className="lg:col-span-8 space-y-12">
-                        {/* Title & Price Section */}
-                        <div className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm">
-                            <p className="text-brand-cobalt font-black text-sm uppercase tracking-widest mb-2">
-                                {features.type} • {property.promoted ? 'Promoted' : 'Featured'}
-                            </p>
-                            <div className="flex flex-col md:flex-row justify-between items-start gap-6">
-                                <div className="space-y-2">
-                                    <h1 className="text-4xl font-black text-[#1A2B3C] leading-tight">{property.listing.title}</h1>
-                                    <p className="text-gray-400 font-bold text-lg flex items-center">
-                                        <svg className="w-5 h-5 mr-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                                        {property.listing.locationName}
-                                    </p>
-                                </div>
-                                <div className="text-right">
-                                    <div className="text-4xl font-black text-[#1A2B3C]">Kz {property.price?.toLocaleString()}</div>
-                                    <p className="text-sm font-black text-gray-400 mt-1 uppercase tracking-widest">
-                                        {Math.round(property.price / (features.sqft || 1)).toLocaleString()} Kz / m²
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Property Specs Table */}
-                        <div className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm">
-                            <h2 className="text-2xl font-black text-[#1A2B3C] mb-8">{features.type} Details</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
-                                {[
-                                    { label: t.surface, value: `${features.sqft} m²` },
-                                    { label: t.rooms, value: features.beds },
-                                    { label: t.floor, value: `${features.floor}/${features.totalFloors}` },
-                                    { label: t.condition, value: features.condition },
-                                    { label: t.built, value: features.yearBuilt },
-                                    { label: t.available, value: features.availableFrom }
-                                ].map((item, i) => (
-                                    <div key={i} className="flex items-center justify-between py-4 border-b border-gray-50 last:border-0">
-                                        <span className="text-gray-400 font-black text-xs uppercase tracking-widest">{item.label}</span>
-                                        <span className="text-[#1A2B3C] font-black">{item.value}</span>
+            <main className="flex-grow pb-32 md:pb-24">
+                {/* Image Gallery - Mobile Slider / Desktop Grid */}
+                <Section spacing="none" className="md:pt-8">
+                    <Container clean className="md:px-4 lg:px-8">
+                        <div className="md:rounded-[2.5rem] overflow-hidden shadow-2xl md:h-[550px] bg-gray-100">
+                            {/* Mobile: Horizontal Scroll Snap */}
+                            <div className="md:hidden flex overflow-x-auto snap-x snap-mandatory no-scrollbar h-[400px]">
+                                {images.map((img, i) => (
+                                    <div key={i} className="min-w-full h-full snap-center">
+                                        <img 
+                                            src={img} 
+                                            onError={handleImageError} 
+                                            className="w-full h-full object-cover" 
+                                            alt={`Property ${i}`} 
+                                        />
                                     </div>
                                 ))}
                             </div>
-                        </div>
 
-                        {/* Description */}
-                        <div className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm">
-                            <h2 className="text-2xl font-black text-[#1A2B3C] mb-6">{t.description}</h2>
-                            <p className="text-gray-500 text-lg leading-relaxed font-medium whitespace-pre-line">
-                                {property.listing.description}
-                            </p>
-                        </div>
-
-                        {/* Location / Map Placeholder */}
-                        <div className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm">
-                            <h2 className="text-2xl font-black text-[#1A2B3C] mb-6">{t.location}</h2>
-                            <div className="aspect-video bg-gray-100 rounded-3xl overflow-hidden relative">
-                                <img 
-                                    src={`https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=1200`} 
-                                    className="w-full h-full object-cover opacity-50 grayscale" 
-                                    alt="Map Placeholder" 
-                                />
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="bg-white px-8 py-4 rounded-2xl shadow-xl border border-gray-100 text-center">
-                                        <p className="font-black text-[#1A2B3C]">{property.listing.locationName}</p>
-                                        <button className="text-brand-cobalt font-black text-[10px] uppercase tracking-widest mt-2 hover:underline">Open in Google Maps</button>
+                            {/* Desktop: Premium Grid */}
+                            <div className="hidden md:grid grid-cols-4 grid-rows-2 gap-2 h-full">
+                                <div className="col-span-2 row-span-2 relative group cursor-pointer overflow-hidden">
+                                    <img src={images[0] || '/assets/hero.png'} onError={handleImageError} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Main" />
+                                    <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-all"></div>
+                                </div>
+                                {images.slice(1, 4).map((img, i) => (
+                                    <div key={i} className="relative group cursor-pointer overflow-hidden">
+                                        <img src={img} onError={handleImageError} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={`Room ${i}`} />
+                                        <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-all"></div>
+                                    </div>
+                                ))}
+                                <div className="relative group cursor-pointer overflow-hidden">
+                                    <img src={images[4]} onError={handleImageError} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Last" />
+                                    <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white font-black group-hover:bg-black/60 transition-all">
+                                        <Sparkles className="w-6 h-6 mb-2" />
+                                        <span className="text-lg">+{images.length > 5 ? images.length - 5 : 0} photos</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </Container>
+                </Section>
 
-                    {/* Right Column (4 units) - Sticky Sidebar */}
-                    <div className="lg:col-span-4 space-y-8">
-                        {/* Agent Card */}
-                        <div className="bg-[#1A2B3C] rounded-[2rem] p-8 text-white shadow-xl">
-                            <div className="flex items-center gap-6 mb-8">
-                                <div className="w-20 h-20 rounded-2xl bg-white/10 overflow-hidden border border-white/20">
-                                    <img src={property.agent.avatar} className="w-full h-full object-cover" alt={property.agent.fullName} />
-                                </div>
-                                <div>
-                                    <h3 className="text-xl font-black">{property.agent.fullName}</h3>
-                                    <p className="text-brand-cobalt font-black text-[10px] uppercase tracking-widest">{t.agent}</p>
-                                </div>
-                            </div>
+                <Container className="mt-8 md:mt-12">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-16">
+                        {/* Left Column - Main Info */}
+                        <div className="lg:col-span-8 space-y-12">
+                            {/* Property Header */}
                             <div className="space-y-4">
-                                <button className="w-full py-4 bg-white text-[#1A2B3C] rounded-2xl font-black text-sm hover:bg-gray-100 transition-all flex items-center justify-center gap-2">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
-                                    {property.agent.phone}
-                                </button>
-                                <button className="w-full py-4 bg-white/10 border border-white/20 text-white rounded-2xl font-black text-sm hover:bg-white/20 transition-all flex items-center justify-center gap-2">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                                    {property.agent.email}
-                                </button>
+                                <div className="flex flex-wrap items-center gap-3">
+                                    <span className="bg-brand-cobalt/10 text-brand-cobalt px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 bg-brand-cobalt rounded-full animate-pulse"></div>
+                                        {features.type || 'Apartment'}
+                                    </span>
+                                    <span className="bg-green-500/10 text-green-600 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                                        <Sparkles className="w-3 h-3" />
+                                        Promoted
+                                    </span>
+                                </div>
+                                <h1 className="text-3xl md:text-5xl font-black text-[#1A2B3C] leading-tight">
+                                    {property.listing.title}
+                                </h1>
+                                <div className="flex items-center text-gray-400 font-bold text-lg">
+                                    <MapPin className="w-5 h-5 mr-2 text-brand-cobalt" />
+                                    {property.listing.locationName}
+                                </div>
+                                <div className="md:hidden text-3xl font-black text-brand-cobalt pt-2">
+                                    Kz {property.price.toLocaleString()}
+                                </div>
                             </div>
-                        </div>
 
-                        {/* Contact Form (LeadForm) */}
-                        <div className="sticky top-24">
-                            <LeadForm propertyId={property.id} agentName={property.agent.fullName} />
-                        </div>
-
-                        {/* Mortgage Calculator */}
-                        <div className="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm space-y-6">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-xl font-black text-[#1A2B3C]">{t.calculator}</h3>
-                                <svg className="w-6 h-6 text-brand-cobalt" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
-                            </div>
-                            <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <div className="flex justify-between text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                                        <span>Loan Amount</span>
-                                        <span>Kz {loanAmount.toLocaleString()}</span>
+                            {/* Quick Stats Grid */}
+                            <div className="grid grid-cols-3 gap-4 md:gap-8 py-8 border-y border-gray-100">
+                                <div className="flex flex-col items-center md:items-start gap-2">
+                                    <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-[#1A2B3C]">
+                                        <Bed className="w-6 h-6 stroke-[2.5]" />
                                     </div>
-                                    <input 
-                                        type="range" 
-                                        min="1000000" 
-                                        max={property.price * 1.5} 
-                                        step="1000000"
-                                        value={loanAmount}
-                                        onChange={(e) => setLoanAmount(parseInt(e.target.value))}
-                                        className="w-full h-1.5 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-brand-cobalt" 
+                                    <div>
+                                        <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">{t.rooms}</p>
+                                        <p className="text-xl font-black text-[#1A2B3C]">{features.beds || 0}</p>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col items-center md:items-start gap-2">
+                                    <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-[#1A2B3C]">
+                                        <Bath className="w-6 h-6 stroke-[2.5]" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">{t.rooms}</p>
+                                        <p className="text-xl font-black text-[#1A2B3C]">{features.baths || 0}</p>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col items-center md:items-start gap-2">
+                                    <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-[#1A2B3C]">
+                                        <Square className="w-6 h-6 stroke-[2.5]" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">{t.surface}</p>
+                                        <p className="text-xl font-black text-[#1A2B3C]">{features.sqft || 0} m²</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Detailed Specs Table */}
+                            <div className="bg-white md:rounded-[2.5rem] md:p-10 md:border md:border-gray-100 md:shadow-sm">
+                                <div className="flex items-center gap-4 mb-8">
+                                    <Info className="w-6 h-6 text-brand-cobalt" />
+                                    <h2 className="text-2xl font-black text-[#1A2B3C]">Property Details</h2>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+                                    {[
+                                        { label: t.surface, value: `${features.sqft} m²`, icon: Square },
+                                        { label: t.rooms, value: features.beds, icon: Bed },
+                                        { label: t.floor, value: `${features.floor}/${features.totalFloors}`, icon: Layers },
+                                        { label: t.condition, value: features.condition, icon: Sparkles },
+                                        { label: t.built, value: features.yearBuilt, icon: Calendar },
+                                        { label: t.available, value: features.availableFrom, icon: Calendar }
+                                    ].map((item, i) => (
+                                        <div key={i} className="flex items-center justify-between py-5 border-b border-gray-50 last:border-0 md:last:border-b">
+                                            <div className="flex items-center gap-3">
+                                                <item.icon className="w-4 h-4 text-gray-300" />
+                                                <span className="text-gray-400 font-black text-xs uppercase tracking-widest">{item.label}</span>
+                                            </div>
+                                            <span className="text-[#1A2B3C] font-black">{item.value}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Description */}
+                            <div className="bg-white md:rounded-[2.5rem] md:p-10 md:border md:border-gray-100 md:shadow-sm">
+                                <h2 className="text-2xl font-black text-[#1A2B3C] mb-6">{t.description}</h2>
+                                <p className="text-gray-500 text-lg leading-relaxed font-medium whitespace-pre-line">
+                                    {property.listing.description}
+                                </p>
+                            </div>
+
+                            {/* Location Map Placeholder */}
+                            <div className="bg-white md:rounded-[2.5rem] md:p-10 md:border md:border-gray-100 md:shadow-sm overflow-hidden">
+                                <div className="flex items-center justify-between mb-8 px-4 md:px-0">
+                                    <h2 className="text-2xl font-black text-[#1A2B3C]">{t.location}</h2>
+                                    <button className="text-brand-cobalt font-black text-xs uppercase tracking-widest flex items-center gap-2 hover:underline">
+                                        Open Maps <ExternalLink className="w-4 h-4" />
+                                    </button>
+                                </div>
+                                <div className="aspect-[16/10] md:aspect-video bg-gray-100 md:rounded-3xl overflow-hidden relative group">
+                                    <img 
+                                        src={`https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=1200`} 
+                                        className="w-full h-full object-cover opacity-50 grayscale transition-all group-hover:scale-105 group-hover:grayscale-0" 
+                                        alt="Map Placeholder" 
                                     />
-                                </div>
-                                <div className="p-6 bg-gray-50 rounded-2xl text-center">
-                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{t.monthly}</p>
-                                    <p className="text-2xl font-black text-brand-cobalt">Kz {Math.round(loanAmount * 0.008).toLocaleString()}</p>
+                                    <div className="absolute inset-0 flex items-center justify-center p-6">
+                                        <div className="bg-white px-8 py-5 rounded-2xl shadow-2xl border border-gray-100 text-center max-w-sm">
+                                            <MapPin className="w-8 h-8 text-brand-cobalt mx-auto mb-3" />
+                                            <p className="font-black text-[#1A2B3C] text-lg">{property.listing.locationName}</p>
+                                            <p className="text-xs text-gray-400 font-bold mt-1 uppercase tracking-widest">Exact location available after booking</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                {/* Similar Properties Section */}
-                <div className="mt-20">
-                    <h2 className="text-3xl font-black text-[#1A2B3C] mb-8">{t.similar}</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        {[1, 2, 3, 4].map((i) => {
-                            const localImages = ['/assets/new_listings.png', '/assets/recently_sold.png', '/assets/price_reduced.png', '/assets/open_houses.png'];
-                            return (
-                                <Link key={i} to={`/property/${i}`} className="group bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all">
-                                    <div className="aspect-[4/3] overflow-hidden">
-                                        <img 
-                                            src={localImages[i-1] || '/assets/hero.png'} 
-                                            onError={handleImageError}
-                                            className="w-full h-full object-cover transition-transform group-hover:scale-110" 
-                                            alt="Similar" 
+                        {/* Right Column - Sidebar */}
+                        <div className="lg:col-span-4 space-y-8">
+                            {/* Agent Card */}
+                            <div className="bg-[#1A2B3C] rounded-[2.5rem] p-8 text-white shadow-2xl relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 transition-all group-hover:scale-150"></div>
+                                <div className="flex items-center gap-6 mb-8 relative z-10">
+                                    <div className="w-20 h-20 rounded-2xl bg-white/10 overflow-hidden border border-white/20 p-1">
+                                        <img src={property.agent.avatar} className="w-full h-full object-cover rounded-xl" alt={property.agent.fullName} />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-black">{property.agent.fullName}</h3>
+                                        <p className="text-brand-cobalt font-black text-[10px] uppercase tracking-widest">{t.agent}</p>
+                                    </div>
+                                </div>
+                                <div className="space-y-4 relative z-10">
+                                    <button className="w-full h-[56px] bg-white text-[#1A2B3C] rounded-2xl font-black text-sm hover:bg-gray-100 transition-all flex items-center justify-center gap-3">
+                                        <Phone className="w-4 h-4 stroke-[3]" />
+                                        {property.agent.phone}
+                                    </button>
+                                    <button className="w-full h-[56px] bg-white/10 border border-white/20 text-white rounded-2xl font-black text-sm hover:bg-white/20 transition-all flex items-center justify-center gap-3">
+                                        <Mail className="w-4 h-4 stroke-[3]" />
+                                        {property.agent.email}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Lead Form */}
+                            <div className="hidden md:block sticky top-24">
+                                <LeadForm propertyId={property.id} agentName={property.agent.fullName} />
+                            </div>
+
+                            {/* Mortgage Calculator */}
+                            <div className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm space-y-6">
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-xl font-black text-[#1A2B3C]">{t.calculator}</h3>
+                                    <Calculator className="w-6 h-6 text-brand-cobalt" />
+                                </div>
+                                <div className="space-y-4">
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                                            <span>Loan Amount</span>
+                                            <span className="text-[#1A2B3C]">Kz {loanAmount.toLocaleString()}</span>
+                                        </div>
+                                        <input 
+                                            type="range" 
+                                            min="1000000" 
+                                            max={property.price * 1.5} 
+                                            step="1000000"
+                                            value={loanAmount}
+                                            onChange={(e) => setLoanAmount(parseInt(e.target.value))}
+                                            className="w-full h-1.5 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-brand-cobalt" 
                                         />
                                     </div>
-                                    <div className="p-6">
-                                    <p className="text-brand-cobalt font-black text-[10px] uppercase tracking-widest mb-1">Apartment</p>
-                                    <h4 className="font-black text-[#1A2B3C] group-hover:text-brand-cobalt transition-colors truncate">Luxury Unit {i} in Talatona</h4>
-                                    <div className="text-lg font-black text-[#1A2B3C] mt-2">Kz 45.000.000</div>
+                                    <div className="p-6 bg-gray-50 rounded-2xl text-center border border-gray-100">
+                                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{t.monthly}</p>
+                                        <p className="text-2xl font-black text-brand-cobalt">Kz {Math.round(loanAmount * 0.008).toLocaleString()}</p>
+                                    </div>
                                 </div>
-                                </Link>
-                            );
-                        })}
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </Container>
+
+                {/* Similar Properties Section */}
+                <Section>
+                    <Container>
+                        <h2 className="text-3xl font-black text-[#1A2B3C] mb-12 px-4 md:px-0">{t.similar}</h2>
+                        <div className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-4 gap-6 px-4 md:px-0 no-scrollbar">
+                            {[1, 2, 3, 4].map((i) => {
+                                const localImages = ['/assets/new_listings.png', '/assets/recently_sold.png', '/assets/price_reduced.png', '/assets/open_houses.png'];
+                                return (
+                                    <Link key={i} to={`/property/${i}`} className="min-w-[280px] snap-center group bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl transition-all">
+                                        <div className="aspect-[4/3] overflow-hidden relative">
+                                            <img 
+                                                src={localImages[i-1] || '/assets/hero.png'} 
+                                                onError={handleImageError}
+                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                                                alt="Similar" 
+                                            />
+                                            <div className="absolute top-4 left-4 bg-white/90 backdrop-blur text-[#1A2B3C] px-3 py-1 rounded-lg text-[10px] font-black uppercase">
+                                                Kz 45M
+                                            </div>
+                                        </div>
+                                        <div className="p-6">
+                                            <p className="text-brand-cobalt font-black text-[10px] uppercase tracking-widest mb-1">Apartment</p>
+                                            <h4 className="font-black text-[#1A2B3C] group-hover:text-brand-cobalt transition-colors truncate">Luxury Unit {i} in Talatona</h4>
+                                        </div>
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    </Container>
+                </Section>
             </main>
+
+            {/* Mobile Sticky Action Bar */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-gray-100 p-4 z-40 flex items-center justify-between safe-area-bottom">
+                <div>
+                    <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest leading-tight">Total Price</p>
+                    <p className="text-xl font-black text-[#1A2B3C]">Kz {property.price.toLocaleString()}</p>
+                </div>
+                <Button className="px-8">{t.contact}</Button>
+            </div>
         </div>
     );
 };
